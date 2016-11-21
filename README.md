@@ -62,7 +62,7 @@ This will create a `build/exe.win<PLATFORM>-<PYTHON_VERSION>` folder that will c
 ###Roadmap: Future features
 
 - Introduce more interaction API
-- Allow user to bundle libraries into the executable
+- Allow user to bundle custom libraries into the executable or to load them from the custom script location
 - Allow image matching to assert visual behaviour
   - Support dry run to to let the user capture the expected behaviour without having to capture the expected image manually
 - Support Gherkin with behave
