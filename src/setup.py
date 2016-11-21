@@ -10,7 +10,8 @@ setup(name="Automation Runner",
       description="Automation Runner",
       options={
           'build_exe': {
-              'packages': ['flask', 'PIL', 'user_interaction', 'system_hotkey', 'external_script_runner'],
+              'packages': ['flask', 'PIL', 'user_interaction', 'system_hotkey', 'external_script_runner',
+                           'system_hotkey'],
               'include_msvcr': True}},
       executables=[main_executable],
-      requires=['flask', 'PIL'])
+      requires=['flask', 'PIL', 'system_hotkey'])
