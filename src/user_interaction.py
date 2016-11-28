@@ -44,11 +44,9 @@ def compare_screen_with_reference(x, y, width, height, reference_file_name):
 
 def __compare_image(reference, captured):
     if reference.size != captured.size:
-        print("Size mismatch between captured and reference image!")
         return False
     for x in range(reference.size[0]):
         for y in range(reference.size[1]):
             if captured.getpixel((x, y)) != reference.getpixel((x, y)):
-                print("Content mismatch between captured and reference image!")
                 return False
     return True
