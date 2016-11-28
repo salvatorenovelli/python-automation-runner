@@ -2,6 +2,7 @@ import win32api
 import win32con
 import win32gui
 import win32process
+import pyscreenshot
 
 
 def get_cursor_pos():
@@ -21,7 +22,7 @@ def get_pixel_colour(x, y):
     return int(long_colour)
 
 
-def get_cur_window_executable():
+def get_foreground_window_executable():
     try:
         hwnd = win32gui.GetForegroundWindow()
         thread, pid = win32process.GetWindowThreadProcessId(hwnd)
@@ -33,3 +34,21 @@ def get_cur_window_executable():
 
 def get_cur_window_text():
     return win32gui.GetWindowText(win32gui.GetForegroundWindow())
+
+
+def compare_screen_with_reference(x, y, width, height, reference_file_name):
+    captured = pyscreenshot.grab(bbox=(x, y, x + width, y + height))
+    reference = pyscreenshot.Image.open(reference_file_name)
+    return __compare_image(captured, reference)
+
+
+def __compare_image(reference, captured):
+    if reference.size != captured.size:
+        print("Size mismatch between captured and reference image!")
+        return False
+    for x in range(reference.size[0]):
+        for y in range(reference.size[1]):
+            if captured.getpixel((x, y)) != reference.getpixel((x, y)):
+                print("Content mismatch between captured and reference image!")
+                return False
+    return True
