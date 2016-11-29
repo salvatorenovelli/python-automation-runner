@@ -13,8 +13,8 @@ class WindowManager:
         self._handle = self.__find_window(pid, cmdline, class_name, window_text)
         if self._handle is None:
             raise Exception(
-                "Unable to find window with attributes: pid: %d, command line: %s, class_name: %s, window text: %s"
-                % (pid, cmdline, class_name, window_text))
+                "Unable to find window with attributes: pid: %s, command line: %s, class_name: %s, window text: %s"
+                % (str(pid), cmdline, class_name, window_text))
 
     def __window_enum_callback(self, hwnd, filters):
         try:
@@ -51,13 +51,6 @@ class WindowManager:
     def set_foreground(self):
         if self._handle is not None:
             try:
-                win32gui.ShowWindow(self._handle, win32con.SW_RESTORE)
-                win32gui.SetWindowPos(self._handle, win32con.HWND_NOTOPMOST, 0, 0, 0, 0,
-                                      win32con.SWP_NOMOVE + win32con.SWP_NOSIZE)
-                win32gui.SetWindowPos(self._handle, win32con.HWND_TOPMOST, 0, 0, 0, 0,
-                                      win32con.SWP_NOMOVE + win32con.SWP_NOSIZE)
-                win32gui.SetWindowPos(self._handle, win32con.HWND_NOTOPMOST, 0, 0, 0, 0,
-                                      win32con.SWP_SHOWWINDOW + win32con.SWP_NOMOVE + win32con.SWP_NOSIZE)
                 win32gui.SetForegroundWindow(self._handle)
             except Exception as e:
                 if e.args[0] != 0:
