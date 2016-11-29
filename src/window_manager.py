@@ -11,6 +11,10 @@ import win32con
 class WindowManager:
     def __init__(self, pid=None, cmdline=None, class_name=None, window_text=None):
         self._handle = self.__find_window(pid, cmdline, class_name, window_text)
+        if self._handle is None:
+            raise Exception(
+                "Unable to find window with attributes: pid: %d, command line: %s, class_name: %s, window text: %s"
+                % (pid, cmdline, class_name, window_text))
 
     def __window_enum_callback(self, hwnd, filters):
         try:
