@@ -1,7 +1,7 @@
 # Python Automation Runner
 
 
-With this runner, I'd like to provide python users with a portable<sup>1</sup> python environment that exposes a basic but powerful set of API to write automation and assertion scripts that run testing scenarios in **native/graphic** applications.
+With this runner, I'd like to provide python users with a portable<sup>1</sup> python environment that exposes a basic but powerful set of API to write automation and assertion scripts to allow easy creation of testing scenarios in **native/graphic** applications.
 The environment will also function as a script `runner`, allowing the user to start and stop their script using windows hotkey. *(this may be more of a script debug feature)*
 
 The main target are:
@@ -13,23 +13,23 @@ The main target are:
 ###Example testing script:
 ```python
 
-    import logging
-    import time
-    
-    import user_interaction as ui
-    
-    
-    logging.info("External script loaded")
-    
-    
-    def main_loop():
-    
-        logging.info("Current cursor position is: %s", str(ui.get_cursor_pos()))
-        logging.info("Current foreground application executable is: %s", str(ui.get_cur_window_executable()))
-    
-        logging.info("Clicking...")
-        ui.click(100, 100)
-        time.sleep(10)    
+import logging
+import time
+
+import user_interaction as ui
+
+
+logging.info("External script loaded")
+
+
+def main_loop():
+
+    logging.info("Current cursor position is: %s", str(ui.get_cursor_pos()))
+    logging.info("Current foreground application executable is: %s", str(ui.get_foreground_window_executable()))
+
+    logging.info("Clicking...")
+    ui.click(100, 100)
+    time.sleep(10)    
 
 ```
 
