@@ -5,14 +5,14 @@ from collections import namedtuple
 from win32gui import EnumWindows
 
 import psutil
+import win32con
 
 
 class WindowManager:
-    def __init__(self):
-        self._running = False
-        self._handle = None
+    def __init__(self, pid=None, cmdline=None, class_name=None, window_text=None):
+        self._handle = self.__find_window(pid, cmdline, class_name, window_text)
 
-    def _window_enum_callback(self, hwnd, filters):
+    def __window_enum_callback(self, hwnd, filters):
         try:
             if self._handle is not None:
                 return
@@ -35,8 +35,26 @@ class WindowManager:
         except Exception as e:
             print(e)
 
-    def find_window(self, pid=None, cmdline=None, class_name=None, window_text=None):
+    def __find_window(self, pid=None, cmdline=None, class_name=None, window_text=None):
         self._handle = None
-        EnumWindows(self._window_enum_callback,
+        EnumWindows(self.__window_enum_callback,
                     namedtuple("Filters", "pid cmdline class_name window_text")(pid, cmdline, class_name, window_text))
         return self._handle
+
+    def get_hwnd(self):
+        return self._handle
+
+    def set_foreground(self):
+        if self._handle is not None:
+            try:
+                win32gui.ShowWindow(self._handle, win32con.SW_RESTORE)
+                win32gui.SetWindowPos(self._handle, win32con.HWND_NOTOPMOST, 0, 0, 0, 0,
+                                      win32con.SWP_NOMOVE + win32con.SWP_NOSIZE)
+                win32gui.SetWindowPos(self._handle, win32con.HWND_TOPMOST, 0, 0, 0, 0,
+                                      win32con.SWP_NOMOVE + win32con.SWP_NOSIZE)
+                win32gui.SetWindowPos(self._handle, win32con.HWND_NOTOPMOST, 0, 0, 0, 0,
+                                      win32con.SWP_SHOWWINDOW + win32con.SWP_NOMOVE + win32con.SWP_NOSIZE)
+                win32gui.SetForegroundWindow(self._handle)
+            except Exception as e:
+                if e.args[0] != 0:
+                    raise e
