@@ -1,8 +1,11 @@
 import win32api
-import win32con
 import win32gui
 import win32process
+
 import pyscreenshot
+import win32con
+
+from window_manager import WindowManager
 
 
 def get_cursor_pos():
@@ -32,8 +35,12 @@ def get_foreground_window_executable():
         print("WindowsProcess", str(err))
 
 
-def get_cur_window_text():
+def get_foreground_window_text():
     return win32gui.GetWindowText(win32gui.GetForegroundWindow())
+
+
+def set_foreground_window(pid=None, cmdline=None, class_name=None, window_text=None):
+    WindowManager(pid, cmdline, class_name, window_text).set_foreground()
 
 
 def compare_screen_with_reference(x, y, width, height, reference_file_name):
