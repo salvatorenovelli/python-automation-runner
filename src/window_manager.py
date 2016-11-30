@@ -5,21 +5,31 @@ from collections import namedtuple
 from win32gui import EnumWindows
 
 import psutil
-import win32con
 
 
 class WindowManager:
     def __init__(self, pid=None, cmdline=None, class_name=None, window_text=None):
-        self._handle = self.__find_window(pid, cmdline, class_name, window_text)
-        if self._handle is None:
-            raise Exception(
-                "Unable to find window with attributes: pid: %s, command line: %s, class_name: %s, window text: %s"
-                % (str(pid), cmdline, class_name, window_text))
+        self._handles = None
+        self.__find_windows(pid, cmdline, class_name, window_text)
+
+    def get_handles(self):
+        return self._handles
+
+    def print(self):
+        for hwnd in self._handles:
+            rect = win32gui.GetWindowRect(hwnd)
+            x = rect[0]
+            y = rect[1]
+            w = rect[2] - x
+            h = rect[3] - y
+            print("PID %s:" % win32process.GetWindowThreadProcessId(hwnd)[1])
+            print("\t Is Visible: %d" % win32gui.IsWindowVisible(hwnd))
+            print("\t Class Name: %s" % win32gui.GetClassName(hwnd))
+            print("\tLocation: (%d, %d)" % (x, y))
+            print("\t    Size: (%d, %d)" % (w, h))
 
     def __window_enum_callback(self, hwnd, filters):
         try:
-            if self._handle is not None:
-                return
             match = True
             pid = win32process.GetWindowThreadProcessId(hwnd)[1]
 
@@ -35,15 +45,26 @@ class WindowManager:
                 window_text = win32gui.GetWindowText(hwnd)
                 match &= re.match(filters.window_text, window_text) is not None
             if match:
-                self._handle = hwnd
+                self._handles.append(hwnd)
         except Exception as e:
             print(e)
 
-    def __find_window(self, pid=None, cmdline=None, class_name=None, window_text=None):
-        self._handle = None
+    def __find_windows(self, pid=None, cmdline=None, class_name=None, window_text=None):
+        if self._handles is not None:
+            raise AssertionError("This instance is already initialized, please create another one.")
+
+        self._handles = list()
         EnumWindows(self.__window_enum_callback,
                     namedtuple("Filters", "pid cmdline class_name window_text")(pid, cmdline, class_name, window_text))
-        return self._handle
+
+
+class Window:
+    def __init__(self, pid=None, cmdline=None, class_name=None, window_text=None):
+        self._handle = WindowManager().find_windows(pid, cmdline, class_name, window_text)
+        if len(self._handle) != 1:
+            raise Exception(
+                "Found %d window/s with the current search criteria: pid: %s, command line: %s, class_name: %s, window text: %s"
+                % (len(self._handle), str(pid), cmdline, class_name, window_text))
 
     def get_hwnd(self):
         return self._handle
