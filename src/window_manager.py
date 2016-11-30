@@ -23,10 +23,10 @@ class WindowManager:
             w = rect[2] - x
             h = rect[3] - y
             print("PID %s:" % win32process.GetWindowThreadProcessId(hwnd)[1])
-            print("\t Is Visible: %d" % win32gui.IsWindowVisible(hwnd))
-            print("\t Class Name: %s" % win32gui.GetClassName(hwnd))
-            print("\tLocation: (%d, %d)" % (x, y))
-            print("\t    Size: (%d, %d)" % (w, h))
+            print("\t Is Visible :  %d" % win32gui.IsWindowVisible(hwnd))
+            print("\t Class Name :  %s" % win32gui.GetClassName(hwnd))
+            print("\t Location   :  (%d, %d)" % (x, y))
+            print("\t Size       :  (%d, %d)" % (w, h))
 
     def __window_enum_callback(self, hwnd, filters):
         try:
