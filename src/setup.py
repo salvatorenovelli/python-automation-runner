@@ -11,7 +11,7 @@ setup(name="Automation Runner",
       options={
           'build_exe': {
               'packages': ['flask', 'PIL', 'user_interaction', 'system_hotkey', 'external_script_runner',
-                           'system_hotkey'], 'pyscreenshot'
+                           'system_hotkey', 'pyscreenshot'],
               'include_msvcr': True}},
       executables=[main_executable],
-      requires=['flask', 'PIL', 'system_hotkey'])
+      requires=['flask', 'PIL', 'system_hotkey', 'psutil', 'pyscreenshot'])
