@@ -10,7 +10,7 @@ The main target are:
 
 
 
-###Example testing script:
+### Example testing script:
 ```python
 
 import logging
@@ -33,7 +33,7 @@ def main_loop():
 
 ```
 
-##Description
+## Description
 
 The runner can be packaged as a windows executable (instructions below) that load, interpret, run and terminate an external python script via hotkeys. 
 
@@ -43,23 +43,23 @@ The runner is also resilient to syntax/runtime errors in the external script, al
 
 **NOTE: If you need to automate web application do NOT use this, please use [Selenium][2].**
 
-##Usage
+## Usage
 
-###Building the executable
+### Building the executable
     python setup.py build
 This will create a `build/exe.win<PLATFORM>-<PYTHON_VERSION>` folder that will contain the `runner.exe`
 
-###Running the runner...
+### Running the runner...
 
     runner.exe myscript.py
 
-###Starting and stopping the loop
+### Starting and stopping the loop
 
 - `CTRL-ALT-M` to **start** the `main_loop`
 - `CTRL-ALT-J` to **stop** the `main_loop`
 
 
-###Roadmap: Future features
+### Roadmap: Future features
 
 - Introduce more interaction API
 - Allow user to bundle custom libraries into the executable or to load them from the custom script location
